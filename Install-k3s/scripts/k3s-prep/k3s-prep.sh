@@ -20,7 +20,7 @@ LAN_GW="10.0.0.1"
 POD_CIDR="10.42.0.0/16"
 SVC_CIDR="10.43.0.0/16"
 CLUSTER_DNS="10.43.0.10"
-UPSTREAM_DNS="1.1.1.1 9.9.9.9"
+UPSTREAM_DNS="1.1.1.1 1.0.0.1"
 
 NODE_HOSTNAME=""        # if set, host is renamed
 SKIP_STATIC=0           # 1 = never touch IP config
