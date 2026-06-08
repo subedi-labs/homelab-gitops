@@ -15,3 +15,12 @@
     * Network: Firewall uncheck
 2. Install Ubuntu
 
+## Troubleshooting
+
+### Unable to SSH into remote server
+
+This error indicates that your local machine's public SSH key is not present in the remote server's list of authorized keys. To resolve this, copy your public key to the remote server using the following command:
+
+```bash
+ssh-copy-id -i ~/.ssh/id_ed25519.pub -p 22 user@remote_server
+```
