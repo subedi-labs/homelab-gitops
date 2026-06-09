@@ -41,8 +41,6 @@ gh ssh-key add ~/.ssh/id_ed25519.pub --title "my-server"
 git clone git@github.com:subedi-labs/homelab-docs.git
 ```
 
-
-
 ### Enable Qemu Guest on VM
 
 ```bash
