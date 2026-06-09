@@ -5,7 +5,7 @@
 * Save host machines ssh key to github profile
 
 ## Create and configure VMs
-1. Create 1 VMS on each proxmox host
+1. **Create 1 VMS on each proxmox host**
     * Display: Default
     * Mem: 8000
     * 1 socket, 3 cores
@@ -14,28 +14,28 @@
     * SCSI Controller: VirtIO SCSI single
     * Hard Disk: Cache: writeback, Discard check, IO thread check, Backup check, skip replication check, read-only uncheck, Asyonc IO: Default.
     * Network: Firewall uncheck
-2. Install Ubuntu
-3. Install GitHub CLI
+2. **Install Ubuntu**
+3. **Install GitHub CLI**
 
-```bash
-sudo apt update
-sudo apt install gh
-```
+    ```bash
+    sudo apt update
+    sudo apt install gh
+    ```
 
-4. Generate VM SSH Keys
+4. **Generate VM SSH Keys**
 
 ```bash
 ssh-keygen -t ed25519 -C "subedipukar@gmail.com" 
 ```
 
-5. Add SSH key to github
+5. **Add SSH key to github**
 
 ```bash
 gh auth login
 gh ssh-key add ~/.ssh/id_ed25519.pub --title "my-server"
 ```
 
-6. Clone `homelab-docs` repo
+6. **Clone `homelab-docs` repo**
 
 ```bash
 git clone git@github.com:subedi-labs/homelab-docs.git
