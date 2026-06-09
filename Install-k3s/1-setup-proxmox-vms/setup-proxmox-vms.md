@@ -16,33 +16,6 @@
     * Network: Firewall uncheck
 2. Install Ubuntu
 
-### Enable Copy and Paste from host to VM
-
-1. Install virt-viewer on host
-
-```bash
-sudo apt update
-sudo apt install virt-viewer
-```
-
-2. Handle the `.vv` file
-
-When you click Console → SPICE in Proxmox, it downloads a `.vv` file to your Windows Downloads folder. You need to access it from WSL:
-
-```bash
-# Your Windows downloads should be accessible in WSL here:
-cd /mnt/c/Users/OITCOSUBEDPC/Downloads
-
-# List to find the .vv file
-ls *.vv
-```
-
-3. Connect
-
-```bash
-remote-viewer /mnt/c/Users/OITCOSUBEDPC/Downloads/pve-spice.vv
-```
-
 ### Enable Qemu Guest on VM
 
 ```bash
@@ -53,9 +26,10 @@ sudo systemctl status qemu-guest-agent
 
 ## Troubleshooting
 
-### Set Hostname
+### Hostname is not set correctly
 
 ```bash
+# Set hostname
 sudo hostnamectl set-hostname <newhostname>
 
 # Refresh shell
@@ -65,6 +39,16 @@ exec bash
 ### Unable to SSH into remote server
 
 #### Option 1:
+
+1. Put your host's ssh key into GitHub
+2. Import SSH key from GitHub
+
+```bash
+sudo apt install ssh-import-id
+ssh-import-id-gh pukar10
+```
+
+#### Option 2:
 
 1. Enable password authentication
 
@@ -79,16 +63,6 @@ sudo systemctl restart ssh
 
 ```bash
 ssh-copy-id -p 2222 user@remote_server
-```
-
-#### Option 2:
-
-1. Put your host's ssh key into GitHub
-2. Import SSH key from GitHub
-
-```bash
-sudo apt install ssh-import-id
-ssh-import-id-gh pukar10
 ```
 
 
