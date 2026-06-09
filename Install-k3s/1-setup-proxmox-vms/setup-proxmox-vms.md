@@ -15,22 +15,22 @@
     * Hard Disk: Cache: writeback, Discard check, IO thread check, Backup check, skip replication check, read-only uncheck, Asyonc IO: Default.
     * Network: Firewall uncheck
 2. Install Ubuntu
-4. Install GitHub CLI
+3. Install GitHub CLI
 
-```
+```bash
 sudo apt update
 sudo apt install gh
 ```
 
-5. Generate VM SSH Keys
+4. Generate VM SSH Keys
 
 ```bash
 ssh-keygen -t ed25519 -C "subedipukar@gmail.com" 
 ```
 
-6. Add SSH key to github
+5. Add SSH key to github
 
-```
+```bash
 gh auth login
 gh ssh-key add ~/.ssh/id_ed25519.pub --title "my-server"
 ```
