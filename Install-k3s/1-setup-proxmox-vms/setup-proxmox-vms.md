@@ -6,7 +6,7 @@
 
 ## Create and configure VMs
 1. Create 1 VMS on each proxmox host
-    * Display: SPICE
+    * Display: Default
     * Mem: 8000
     * 1 socket, 3 cores
     * BIOS: Default (SeaBIOS)
