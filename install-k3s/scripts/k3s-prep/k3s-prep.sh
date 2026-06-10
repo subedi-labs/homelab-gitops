@@ -205,6 +205,19 @@ EOF"
             die "No supported network manager found to set static IP."
         fi
         ok "Static IP configured: $STATIC_IP via $STATIC_GW"
+        echo
+        echo -e "${c_yel}╔══════════════════════════════════════════════════════════╗${c_off}"
+        echo -e "${c_yel}║  YOUR SSH SESSION MAY NOW DROP                           ║${c_off}"
+        echo -e "${c_yel}║                                                          ║${c_off}"
+        echo -e "${c_yel}║  Reconnect using the new IP address:                     ║${c_off}"
+        echo -e "${c_yel}║                                                          ║${c_off}"
+        echo -e "${c_yel}║    ssh ${USER}@${ip_only}                         ║${c_off}"
+        echo -e "${c_yel}║                                                          ║${c_off}"
+        echo -e "${c_yel}║  Then re-run this script to continue setup.              ║${c_off}"
+        echo -e "${c_yel}╚══════════════════════════════════════════════════════════╝${c_off}"
+        echo
+        sleep 3
+
     else
         warn "Leaving DHCP in place (a stable lease/reservation is recommended)."
     fi
