@@ -282,7 +282,7 @@ STEP 1 — FIRST node (bootstraps the cluster + embedded etcd)
 
     curl -sfL https://get.k3s.io | sh -s - server \\
       --cluster-init \\
-      --node-name=$$NODE_HOSTNAME \\
+      --node-name=$NODE_HOSTNAME \\
       --cluster-cidr=$POD_CIDR \\
       --service-cidr=$SVC_CIDR \\
       --cluster-dns=$CLUSTER_DNS \\
