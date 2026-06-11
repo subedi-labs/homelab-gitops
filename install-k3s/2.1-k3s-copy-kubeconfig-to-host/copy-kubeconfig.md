@@ -1,5 +1,9 @@
 # Copy Kubeconfig
 
+### Pre-Req
+
+- Install `kubectl` on host
+
 ### 1. Grab the kubeconfig
 
 ```bash
