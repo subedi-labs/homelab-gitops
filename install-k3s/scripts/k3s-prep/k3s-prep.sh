@@ -280,7 +280,9 @@ cat <<EOF | tee -a "$LOG"
 STEP 1 — FIRST node (bootstraps the cluster + embedded etcd)
   Run this ONCE, only on the very first node:
 
-    sudo curl -sfL https://get.k3s.io | sudo sh -s - server \\
+    curl -sfL https://get.k3s.io | sudo sh -s - server \\
+      --disable=traefik \\
+      --disable=servicelb \\
       --cluster-init \\
       --node-name=$NODE_HOSTNAME \\
       --cluster-cidr=$POD_CIDR \\
@@ -289,9 +291,7 @@ STEP 1 — FIRST node (bootstraps the cluster + embedded etcd)
       --node-ip=${NODE_IP:-<this-node-ip>} \\
       --flannel-backend=vxlan \\
       --write-kubeconfig-mode=0644 \\
-      --tls-san=${NODE_IP:-<this-node-ip>} \\
-      --disable=traefik \\
-      --disable=servicelb
+      --tls-san=${NODE_IP:-<this-node-ip>}
 
   --cluster-init enables embedded etcd. --cluster-cidr/--service-cidr/
   --cluster-dns are set here ONCE; all later nodes inherit them — do NOT
