@@ -39,5 +39,5 @@ spec:
 3. Apply the custom manifest
 
 ```bash
-kubectl apply -f metallb-config.yaml
+kubectl apply -f metallb-config.yml
 ```
