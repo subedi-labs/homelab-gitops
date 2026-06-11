@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# prep-k3s-node.sh — preps a VM before installing it as a k3s node.
+# vms-prep.sh — preps a VM before installing it as a k3s node.
 # Supports Debian/Ubuntu and RHEL/Rocky/Alma.
 #
 # Network defaults: LAN 10.0.0.0/24 | Pod 10.42.0.0/16 | Svc 10.43.0.0/16 | DNS 10.43.0.10
