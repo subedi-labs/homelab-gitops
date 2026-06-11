@@ -1,5 +1,7 @@
 # Install MetalLB
 
+> Note: Can be run from host machine if kubeconfig is setup
+
 1. Apply metalLB manifest
 
 ```bash
@@ -9,13 +11,9 @@ sudo kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.16.1/
 sudo kubectl wait -n metallb-system --for=condition=ready pod --selector=app=metallb --timeout=90s
 ```
 
-2. Configure MetalLB with an IP address pool by creating and applying a custom manifest.
+2. Create `metallb-config.yml` manifest
 
 ```bash
-# Create manifest
-vim metallb-config.yaml
-
-# Manifest content
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
@@ -34,4 +32,11 @@ metadata:
 spec:
   ipAddressPools:
   - lan-pool
+```
+
+
+3. Apply the custom manifest
+
+```bash
+sudo kubectl apply -f metallb-config.yaml
 ```
