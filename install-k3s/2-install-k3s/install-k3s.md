@@ -24,7 +24,7 @@ sudo systemctl status k3s
 
 sudo kubectl get nodes
 
-sudo kubectl get pods -A
+sudo kubectl get pods -A --watch
 ```
 
 ### 3. Grab node token
