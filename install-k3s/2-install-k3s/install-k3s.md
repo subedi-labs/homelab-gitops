@@ -63,9 +63,6 @@ users:
 - name: <cluster_name>              # 7. user name
 ```
 
-`server: https://127.0.0.1:6443` with your server IP `server: https://10.0.0.50:6443`
-3. 
-
 ### 5. Install MetalLB
 
 ```bash
