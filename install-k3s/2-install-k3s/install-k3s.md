@@ -4,6 +4,8 @@
 
 ```bash
 sudo curl -sfL https://get.k3s.io | sudo sh -s - server \
+    --disable=traefik \
+    --disable=servicelb \
     --cluster-init \
     --node-name=k3-hybrid-01 \
     --cluster-cidr=10.42.0.0/16 \
@@ -13,8 +15,6 @@ sudo curl -sfL https://get.k3s.io | sudo sh -s - server \
     --flannel-backend=vxlan \
     --write-kubeconfig-mode=0644 \
     --tls-san=10.0.0.50 \
-    --disable=traefik \
-    --disable=servicelb
 ```
 
 ### 2. Verify k3s is running
