@@ -9,7 +9,7 @@
 
 2. Verify it is clean
 
-```
+```bash
 systemctl status k3s 2>/dev/null
 ls /etc/rancher/k3s/
 ls /var/lib/rancher/k3s/
