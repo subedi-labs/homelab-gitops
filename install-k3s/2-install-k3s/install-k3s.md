@@ -39,7 +39,32 @@ sudo cat /var/lib/rancher/k3s/server/node-token
 sudo cat /etc/rancher/k3s/k3s.yaml
 ```
 
-Copy this to your Windows machine at `C:\Users\OITCOSUBEDP\.kube\config` and replace `127.0.0.1` with your server IP `10.0.0.50`.
+#### 4.1 Copy kubeconfig to host
+
+1. Copy to host machine at `~/.kube/config` 
+2. Update values in kubeconfig:
+
+```bash
+clusters:
+- cluster:
+    ...
+    server: https://<node_ip>:6443  # 1. Node IP address
+  name: <cluster_name>              # 2. cluster name
+
+contexts:
+- context:
+    cluster: <cluster_name>         # 3. must match cluster name above
+    user: <cluster_name>            # 4. must match user name below
+  name: <cluster_name>              # 5. context name
+
+current-context: <cluster_name>     # 6. must match context name above
+
+users:
+- name: <cluster_name>              # 7. user name
+```
+
+`server: https://127.0.0.1:6443` with your server IP `server: https://10.0.0.50:6443`
+3. 
 
 ### 5. Install MetalLB
 
