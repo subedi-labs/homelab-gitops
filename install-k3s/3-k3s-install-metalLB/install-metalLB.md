@@ -1,6 +1,7 @@
 # Install MetalLB
 
-> Note: Can be run from host machine if kubeconfig is setup
+> **Note**: Run from host if kubeconfig is setup.  
+> If running from k3-node `sudo` is usually required.
 
 1. Apply metalLB manifest
 
