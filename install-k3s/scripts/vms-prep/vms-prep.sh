@@ -289,13 +289,10 @@ STEP 1 — FIRST node (bootstraps the cluster + embedded etcd)
       --service-cidr=$SVC_CIDR \\
       --cluster-dns=$CLUSTER_DNS \\
       --node-ip=${NODE_IP:-<this-node-ip>} \\
-      --flannel-backend=vxlan \\
+      --flannel-backend=none \\
+      --disable-network-policy \\
       --write-kubeconfig-mode=0644 \\
       --tls-san=${NODE_IP:-<this-node-ip>}
-
-  --cluster-init enables embedded etcd. --cluster-cidr/--service-cidr/
-  --cluster-dns are set here ONCE; all later nodes inherit them — do NOT
-  repeat those three flags below.
 
 STEP 2 — Grab the join token (from the FIRST node)
 
@@ -303,44 +300,29 @@ STEP 2 — Grab the join token (from the FIRST node)
 
   Copy the whole string; you'll use it as K3S_TOKEN on every other node.
 
-STEP 3 — EACH additional hybrid node (joins as control-plane + worker)
-  Run on every node AFTER the first (run them one at a time):
+STEP 3 — EACH additional hybrid node
+  Run on every node AFTER the first
 
     curl -sfL https://get.k3s.io | \\
-      K3S_TOKEN=<token-from-step-2> \\
-      sh -s - server \\
-      --server=https://<first-node-ip>:6443 \\
-      --node-ip=<this-node-ip> \\
-      --flannel-backend=vxlan \\
-      --write-kubeconfig-mode=0644 \\
-      --tls-san=<this-node-ip>
-
-  *** etcd QUORUM RULE: keep the total number of nodes ODD (1, 3, 5...).
-      A 2-node cluster has NO fault tolerance. Use 3 for real HA. ***
+        K3S_TOKEN=<token-from-step-2> \\
+        sh -s - server \\
+        --server=https://<first-node-ip>:6443 \\
+        --node-name=<this-node-name> \\
+        --node-ip=<this-node-ip> \\
+        --flannel-backend=none \\
+        --disable-network-policy \\
+        --disable=traefik \\
+        --disable=servicelb \\
+        --write-kubeconfig-mode=0644 \\
+        --tls-san=<this-node-ip>
 
 STEP 4 — Verify (from any node)
 
-    sudo kubectl get nodes -o wide          # all should be Ready
-    sudo kubectl get pods -A                 # coredns/traefik Running
+    sudo kubectl get nodes
+    sudo kubectl get pods
 
-  kubeconfig lives at /etc/rancher/k3s/k3s.yaml. To use kubectl as a
-  normal user, or from your laptop:
+  kubeconfig lives at /etc/rancher/k3s/k3s.yaml
 
-    mkdir -p ~/.kube
-    sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
-    sudo chown \$(id -u):\$(id -g) ~/.kube/config
-    # if copying to another machine, edit 'server:' from 127.0.0.1 to <first-node-ip>
-
-USEFUL TO KNOW
-  - Service / restart : sudo systemctl status|restart k3s
-  - Live logs         : sudo journalctl -u k3s -f
-  - Config file       : put flags in /etc/rancher/k3s/config.yaml to avoid
-                        re-typing them; survives upgrades.
-  - Add/remove later  : new nodes just repeat STEP 3. To remove a node:
-                        kubectl drain <n> --ignore-daemonsets --delete-emptydir-data
-                        kubectl delete node <n>   (then uninstall on that host)
-  - Uninstall a node : sudo /usr/local/bin/k3s-uninstall.sh   (server)
-                       sudo /usr/local/bin/k3s-agent-uninstall.sh (agent)
 ============================================================
 EOF
 exit 0
