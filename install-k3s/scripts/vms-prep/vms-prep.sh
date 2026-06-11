@@ -291,6 +291,7 @@ STEP 1 — FIRST node (bootstraps the cluster + embedded etcd)
       --node-ip=${NODE_IP:-<this-node-ip>} \\
       --flannel-backend=none \\
       --disable-network-policy \\
+      --disable-kube-proxy \\
       --write-kubeconfig-mode=0644 \\
       --tls-san=${NODE_IP:-<this-node-ip>}
 
@@ -311,6 +312,7 @@ STEP 3 — EACH additional hybrid node
         --node-ip=<this-node-ip> \\
         --flannel-backend=none \\
         --disable-network-policy \\
+        --disable-kube-proxy \\
         --disable=traefik \\
         --disable=servicelb \\
         --write-kubeconfig-mode=0644 \\
