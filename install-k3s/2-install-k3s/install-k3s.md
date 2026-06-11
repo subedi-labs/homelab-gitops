@@ -3,7 +3,7 @@
 1. Install first hybrid node
 
 ```bash
-curl -sfL https://get.k3s.io | sh -s - server \
+sudo curl -sfL https://get.k3s.io | sudo sh -s - server \
     --cluster-init \
     --node-name=k3-hybrid-01 \
     --cluster-cidr=10.42.0.0/16 \
@@ -12,7 +12,7 @@ curl -sfL https://get.k3s.io | sh -s - server \
     --node-ip=10.0.0.50 \
     --flannel-backend=vxlan \
     --write-kubeconfig-mode=0644 \
-    --tls-san=10.0.0.50
+    --tls-san=10.0.0.50 \
     --disable=traefik \
     --disable=servicelb
 ```
