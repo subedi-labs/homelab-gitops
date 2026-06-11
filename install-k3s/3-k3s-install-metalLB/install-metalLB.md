@@ -41,3 +41,22 @@ spec:
 ```bash
 kubectl apply -f metallb-config.yml
 ```
+
+4. Verify installation
+
+```bash
+# Check MetalLB pods are running
+kubectl get pods -n metallb-system
+
+# Check IP pool was created
+kubectl get ipaddresspool -n metallb-system
+
+# Check L2 advertisement
+kubectl get l2advertisement -n metallb-system
+```
+
+Expected outputs for pods
+
+NAME                          READY   STATUS    RESTARTS   AGE
+controller-xxxxx              1/1     Running   0          2m
+speaker-xxxxx                 1/1     Running   0          2m
