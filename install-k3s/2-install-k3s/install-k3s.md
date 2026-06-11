@@ -14,7 +14,7 @@ sudo curl -sfL https://get.k3s.io | sudo sh -s - server \
     --node-ip=10.0.0.50 \
     --flannel-backend=vxlan \
     --write-kubeconfig-mode=0644 \
-    --tls-san=10.0.0.50 \
+    --tls-san=10.0.0.50
 ```
 
 ### 2. Verify k3s is running
