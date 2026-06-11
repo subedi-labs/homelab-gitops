@@ -5,10 +5,10 @@
 1. Apply metalLB manifest
 
 ```bash
-sudo kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.16.1/config/manifests/metallb-native.yaml
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.16.1/config/manifests/metallb-native.yaml
 
 # Wait for completion
-sudo kubectl wait -n metallb-system --for=condition=ready pod --selector=app=metallb --timeout=90s
+kubectl wait -n metallb-system --for=condition=ready pod --selector=app=metallb --timeout=90s
 ```
 
 2. Create `metallb-config.yml` manifest
@@ -38,5 +38,5 @@ spec:
 3. Apply the custom manifest
 
 ```bash
-sudo kubectl apply -f metallb-config.yaml
+kubectl apply -f metallb-config.yaml
 ```
