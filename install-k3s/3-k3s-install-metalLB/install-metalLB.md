@@ -55,8 +55,9 @@ kubectl get ipaddresspool -n metallb-system
 kubectl get l2advertisement -n metallb-system
 ```
 
-Expected outputs for pods
+Expected outputs for pods:
 
-NAME                          READY   STATUS    RESTARTS   AGE
-controller-xxxxx              1/1     Running   0          2m
-speaker-xxxxx                 1/1     Running   0          2m
+| NAME | READY | STATUS | RESTARTS | AGE |
+| ---- | ----- | ------ | -------- | --- |
+| controller-xxxxx | 1/1 | Running | 0 | 2m |
+| speaker-xxxxx | 1/1 | Running | 0 | 2m |
