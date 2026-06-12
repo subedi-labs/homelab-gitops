@@ -12,10 +12,11 @@ sudo curl -sfL https://get.k3s.io | sudo sh -s - server \
     --service-cidr=10.43.0.0/16 \
     --cluster-dns=10.43.0.10 \
     --node-ip=10.0.0.50 \
-    --flannel-backend=vxlan \
+    --flannel-backend=none \
+    --disable-network-policy \
+    --disable-kube-proxy \
     --write-kubeconfig-mode=0644 \
     --tls-san=10.0.0.50
-```
 
 ### 2. Verify k3s is running
 
