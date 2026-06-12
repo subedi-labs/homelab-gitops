@@ -188,11 +188,12 @@ log "Installing base packages"
 if [[ $OS == debian ]]; then
     DEBIAN_FRONTEND=noninteractive apt-get update -y
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
-        curl wget iptables nfs-common chrony jq ca-certificates open-iscsi
+        curl wget iptables nfs-common chrony jq ca-certificates open-iscsi cryptsetup
 else
-    dnf install -y curl wget iptables nfs-utils chrony jq ca-certificates iscsi-initiator-utils helm
+    dnf install -y curl wget iptables nfs-utils chrony jq ca-certificates iscsi-initiator-utils open-iscsi cryptsetup
 fi
 
+sudo systemctl enable --now iscsid 2>/dev/null || true
 curl -fsSL -o /tmp/get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
 chmod 700 /tmp/get_helm.sh
 /tmp/get_helm.sh
