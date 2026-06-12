@@ -7,7 +7,7 @@ sudo curl -sfL https://get.k3s.io | \
   INSTALL_K3S_EXEC="--node-name=<k3-worker-02> \
     --node-ip=<10.0.0.51> \
     --disable-kube-proxy \
-    --node-label topology.kubernetes.io/zone=pve-host-1 \
-    --node-label node.kubernetes.io/instance-type=worker" \
+    --node-label topology.kubernetes.io/zone=<pve-host-1> \
+    --node-label node.kubernetes.io/instance-<type=worker>" \
   sh -
 ```
