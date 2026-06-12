@@ -90,7 +90,6 @@ sudo systemctl restart ssh
 ssh-copy-id -p 2222 user@remote_server
 ```
 
-
 ## Cheatsheet
 
 1. Clone repo and prep VM
