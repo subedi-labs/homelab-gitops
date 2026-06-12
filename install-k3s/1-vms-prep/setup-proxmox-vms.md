@@ -89,3 +89,13 @@ sudo systemctl restart ssh
 ```bash
 ssh-copy-id -p 2222 user@remote_server
 ```
+
+
+## Cheatsheet
+
+1. Clone repo and prep VM
+
+```bash
+git clone https://github.com/subedi-labs/homelab-docs.git
+sudo ./homelab-docs/install-k3s/1-vms-prep/vms-prep.sh
+```

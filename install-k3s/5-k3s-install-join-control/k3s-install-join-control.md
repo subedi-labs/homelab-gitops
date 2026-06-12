@@ -1,5 +1,7 @@
 # Install and Join Control Node
 
+1. Install and join control node
+
 ```bash
 sudo curl -sfL https://get.k3s.io | \
   K3S_URL=https://10.0.0.50:6443 \
@@ -13,4 +15,11 @@ sudo curl -sfL https://get.k3s.io | \
     --node-label topology.kubernetes.io/zone=pve-host-1 \
     --node-label node.kubernetes.io/instance-type=control-plane" \
   sh -
+```
+ 
+2. Verify
+
+```bash
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+kubectl get nodes -o wide
 ```
