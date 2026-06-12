@@ -195,6 +195,11 @@ if [[ $OS == debian ]]; then
 else
     dnf install -y curl wget iptables nfs-utils chrony jq ca-certificates iscsi-initiator-utils helm
 fi
+
+curl -fsSL -o /tmp/get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
+chmod 700 /tmp/get_helm.sh
+/tmp/get_helm.sh
+
 ok "Base packages installed"
 
 # ----------------------------------------------------------------------------
