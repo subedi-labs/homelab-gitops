@@ -3,18 +3,19 @@
 1. Install and join control node
 
 ```bash
-sudo curl -sfL https://get.k3s.io | \
+curl -sfL https://get.k3s.io | \
   K3S_URL=https://10.0.0.50:6443 \
-  K3S_TOKEN=K10562e960b4ddebf2a78d936a546a3c845eb2f190ecc8732b6dd5a859701d58e00::server:8659ce1c62f3d386d25567c76feeabdc \
+  K3S_TOKEN=K1011862973e0f4c325adbab3670ceba4be5f568921084d330b4bf8fd048a71fbd7::server:ff126f12946f41e08e429285f4c42993 \
   INSTALL_K3S_EXEC="server \
-    --node-name=<k3-control-02> \
-    --node-ip=<10.0.0.52> \
+    --node-name=k3-02 \
+    --node-ip=10.0.0.51 \
+    --disable=traefik \
+    --disable=servicelb \
     --disable-kube-proxy \
     --flannel-backend=none \
     --disable-network-policy \
-    --node-label topology.kubernetes.io/zone=pve-host-1 \
-    --node-label node.kubernetes.io/instance-type=control-plane" \
-  sh -
+    --write-kubeconfig-mode=0644" \
+  sudo sh -
 ```
  
 2. Verify
