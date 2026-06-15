@@ -5,7 +5,7 @@
 ### 1. Install first k3s control node
 
 ```bash
-sudo curl -sfL https://get.k3s.io | sudo sh -s - server \
+curl -sfL https://get.k3s.io | sudo sh -s - server \
     --disable=traefik \
     --disable=servicelb \
     --cluster-init \
