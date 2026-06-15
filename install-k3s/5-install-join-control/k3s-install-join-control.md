@@ -25,6 +25,6 @@ export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 sudo kubectl get nodes -o wide
 ```
 
-Uninstall
+99. Uninstall
 
 `/usr/local/bin/k3s-uninstall.sh`
