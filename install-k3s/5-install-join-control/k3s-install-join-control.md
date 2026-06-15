@@ -22,5 +22,9 @@ curl -sfL https://get.k3s.io | \
 
 ```bash
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-kubectl get nodes -o wide
+sudo kubectl get nodes -o wide
 ```
+
+Uninstall
+
+`/usr/local/bin/k3s-uninstall.sh`
