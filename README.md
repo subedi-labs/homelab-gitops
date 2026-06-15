@@ -17,9 +17,6 @@ docs
 
 | Host | VM | Role | CPU | RAM | OS Disk | Longhorn Disk |
 |---|---|---|---|---|---|---|
-| proxmox1 | k3s-cp-1 | Control plane | 2 cores | 4 GB | 20 GB | 30 GB |
-| proxmox1 | k3s-worker-1 | Worker | 4 cores | 8 GB | 20 GB | 50 GB |
-| proxmox2 | k3s-cp-2 | Control plane | 2 cores | 4 GB | 20 GB | 100 GB |
-| proxmox2 | k3s-worker-2 | Worker | 4 cores | 8 GB | 20 GB | 200 GB |
-| proxmox3 | k3s-cp-3 | Control plane | 2 cores | 4 GB | 20 GB | 30 GB |
-| proxmox3 | k3s-worker-3 | Worker | 4 cores | 8 GB | 20 GB | 50 GB |
+| proxmox1 | k3s-1 | CP + Worker | 6 cores | 12 GB | 20 GB | 100 GB |
+| proxmox2 | k3s-2 | CP + Worker | 6 cores | 12 GB | 20 GB | 100 GB |
+| proxmox3 | k3s-3 | CP + Worker | 6 cores | 12 GB | 20 GB | 100 GB |
