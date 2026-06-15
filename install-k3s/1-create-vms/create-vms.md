@@ -12,7 +12,14 @@
     * BIOS: Default (SeaBIOS)
     * Machine: q35
     * SCSI Controller: VirtIO SCSI single
-    * Hard Disk: Cache: writeback, Discard check, IO thread check, Backup check, skip replication check, read-only uncheck, Asyonc IO: Default.
+    * Hard Disk: 
+      * Cache: writeback, 
+      * Discard check, 
+      * IO thread check, 
+      * Backup check, 
+      * skip replication check, 
+      * read-only uncheck, 
+      * Asyonc IO: Default.
     * Network: Firewall uncheck
 2. **Add additional Disk for Longhorn**
 3. **Install Ubuntu**
