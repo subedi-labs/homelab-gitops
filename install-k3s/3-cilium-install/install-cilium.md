@@ -48,5 +48,6 @@ helm install cilium cilium/cilium \
   --set l2announcements.leaseRetryPeriod=200ms \
   --set externalIPs.enabled=true \
   --set hubble.relay.enabled=true \
-  --set hubble.ui.enabled=true
+  --set hubble.ui.enabled=true \
+  --set gatewayAPI.enabled=true
 ```

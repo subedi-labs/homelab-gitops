@@ -9,7 +9,7 @@ curl -sfL https://get.k3s.io | sudo sh -s - server \
     --disable=traefik \
     --disable=servicelb \
     --cluster-init \
-    --node-name=k3-control-01 \
+    --node-name=k3-01 \
     --cluster-cidr=10.42.0.0/16 \
     --service-cidr=10.43.0.0/16 \
     --cluster-dns=10.43.0.10 \
