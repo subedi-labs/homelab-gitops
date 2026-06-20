@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: authentik-db-creds
+  namespace: authentik
+type: Opaque
+stringData:
+  password: "4yrE2NTubF86UxKl3UjqzPzOgh8zspx6opKvNIswx6GMBsd6JmuWGt1JRqhYwldO"

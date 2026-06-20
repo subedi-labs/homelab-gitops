@@ -1,0 +1,23 @@
+postgresql:
+  enabled: false   # using CNPG instead of the bundled chart Postgres
+
+authentik:
+  secret_key: "EY7E75IeixJriC/O/Xx32yFaN5JKE3zH1IfRNPe5Uk8BPY7YpkjVlXbcsVMaavd5gS9lMMp7WD6kK7RR"
+  postgresql:
+    host: "authentik-db-rw.authentik.svc.cluster.local"
+    name: "authentik"
+    user: "authentik"
+    port: 5432
+    # password left blank — supplied via env var below from the CNPG secret
+
+global:
+  env:
+    - name: AUTHENTIK_POSTGRESQL__PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: authentik-db-creds
+          key: password
+
+server:
+  ingress:
+    enabled: false   # exposing via Gateway API HTTPRoute, not chart ingress
