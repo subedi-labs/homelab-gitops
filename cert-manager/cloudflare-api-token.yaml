@@ -5,4 +5,4 @@ metadata:
   namespace: cert-manager
 type: Opaque
 stringData:
-  api-token: "cfut_JeuRHU8NTwM7CiRXJ0mHEeK0UmvwO5VUwL6biWDe94ab0a6b"
+  api-token: cfut_BrBkkamJExPmPw7orex3jAmIPTftjCUR6ajdOLAba6fd878e

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cloudflared-cluster-tunnel-token
+  namespace: cloudflare
+type: Opaque
+stringData:
+  token: eyJhIjoiOTEyYTBhNTExZTc3OWUwM2ZhMWNiNTc4ZGJkYTY0NzMiLCJ0IjoiZTMzYzlkNWUtNDlmMy00ZDQwLWEyMTUtYTJiMjE4NWY5ZGM2IiwicyI6IllUUTRaV1JpTW1ZdE16TmtaaTAwTkdZNUxUbG1NR0l0WW1Oa09UUmlNemcxWWpJeiJ9
