@@ -1,0 +1,36 @@
+cloudflare:
+  tunnel_token: "eyJhIjoiOTEyYTBhNTExZTc3OWUwM2ZhMWNiNTc4ZGJkYTY0NzMiLCJ0IjoiZTMzYzlkNWUtNDlmMy00ZDQwLWEyMTUtYTJiMjE4NWY5ZGM2IiwicyI6IllUUTRaV1JpTW1ZdE16TmtaaTAwTkdZNUxUbG1NR0l0WW1Oa09UUmlNemcxWWpJeiJ9"
+
+# Each replica opens 4 connections to Cloudflare's edge, so you get 8 total.
+replicaCount: 2
+
+image:
+  repository: cloudflare/cloudflared
+  tag: "2026.6.1"
+  pullPolicy: IfNotPresent
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    memory: 128Mi
+
+# Matches the pod label the chart applies (`pod: cloudflared`).
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              pod: cloudflared
+          topologyKey: kubernetes.io/hostname
+
+podLabels:
+  app.kubernetes.io/part-of: networking
+
+podAnnotations: {}
+
+nodeSelector: {}
+tolerations: []
