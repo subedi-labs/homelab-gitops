@@ -43,7 +43,7 @@ command -v kubectl  &>/dev/null || err "kubectl not found"
 command -v openssl  &>/dev/null || err "openssl not found"
 
 log "Checking cluster connectivity..."
-kubectl cluster-info &>/dev/null || err "Cannot reach cluster — check your kubeconfig"
+kubectl get nodes &>/dev/null || err "Cannot reach cluster — check your kubeconfig"
 
 $DRY_RUN && log "DRY RUN mode — no changes will be made"
 
