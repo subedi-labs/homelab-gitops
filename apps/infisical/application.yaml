@@ -1,0 +1,47 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: infisical
+  namespace: argocd
+spec:
+  destination:
+    namespace: infisical
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    chart: infisical-standalone
+    repoURL: "https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts/"
+    targetRevision: 1.9.0
+    helm:
+      values: |
+        infisical:
+          enabled: true
+          autoDatabaseSchemaMigration: true
+          image:
+            repository: infisical/infisical
+            tag: "v0.161.3-postgres"
+          replicaCount: 1
+          kubeSecretRef: "infisical-secrets"
+          env:
+            SITE_URL: "https://infisical.pukarsubedi.com"
+            TELEMETRY_ENABLED: "false"
+            DB_CONNECTION_URI: ""  # pulled from kubeSecretRef
+
+        postgresql:
+          enabled: false  # using CNPG
+
+        redis:
+          enabled: true
+          architecture: standalone
+          auth:
+            enabled: false
+
+        ingress:
+          enabled: false  # using Gateway API HTTPRoute
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

@@ -1,0 +1,26 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: infisical-db
+  namespace: infisical
+spec:
+  instances: 1
+  imageName: ghcr.io/cloudnative-pg/postgresql:16
+
+  bootstrap:
+    initdb:
+      database: infisical
+      owner: infisical
+      secret:
+        name: infisical-db-credentials
+
+  storage:
+    size: 5Gi
+    storageClass: longhorn
+
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    limits:
+      memory: 512Mi
