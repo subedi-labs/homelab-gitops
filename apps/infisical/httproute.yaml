@@ -11,6 +11,10 @@ spec:
   hostnames:
     - infisical.pukarsubedi.com
   rules:
-    - backendRefs:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
         - name: infisical
-          port: 80
+          port: 8080
