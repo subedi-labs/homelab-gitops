@@ -1,0 +1,23 @@
+# Gateway API HTTPRoute for authentik.
+# Assumes you have a Gateway already provisioned (e.g. via Cilium, Envoy, Istio, etc.)
+# Adjust gatewayName, namespace, and hostname to match your setup.
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: authentik
+  namespace: authentik
+spec:
+  parentRefs:
+    - name: my-gateway            # <-- your Gateway name
+      namespace: gateway          # <-- namespace where the Gateway lives
+      sectionName: https          # <-- listener name (omit if only one listener)
+  hostnames:
+    - auth.example.com            # <-- your authentik domain
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: authentik-server  # service created by the Helm chart
+          port: 80

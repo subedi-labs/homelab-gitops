@@ -1,0 +1,24 @@
+# CloudNativePG Cluster for authentik.
+# Requires the CNPG operator to already be installed in your cluster.
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: authentik-db
+  namespace: authentik
+spec:
+  instances: 1          # bump to 2+ for HA in prod
+  imageName: ghcr.io/cloudnative-pg/postgresql:16
+
+  bootstrap:
+    initdb:
+      database: authentik
+      owner: authentik
+      secret:
+        name: authentik-db-credentials  # created by ExternalSecret above
+
+  storage:
+    size: 10Gi
+    storageClass: local-path   # <-- change to your StorageClass
+
+  # Expose a read-write service that the Helm chart will connect to
+  # CNPG creates: authentik-db-rw, authentik-db-r, authentik-db-ro automatically
