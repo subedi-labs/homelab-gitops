@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts/
     chart: infisical-standalone
-    targetRevision: "0.161.3" # verify with: helm search repo infisical/infisical-standalone
+    targetRevision: "0.161.3"  # verify with: helm search repo infisical/infisical-standalone
     helm:
       releaseName: infisical
       values: |
@@ -22,6 +22,8 @@ spec:
         redis:
           enabled: true
         ingress:
+          enabled: false
+        ingress-nginx:
           enabled: false
   destination:
     server: https://kubernetes.default.svc
