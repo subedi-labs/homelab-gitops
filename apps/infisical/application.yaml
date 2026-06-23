@@ -35,13 +35,9 @@ spec:
           architecture: standalone
           auth:
             enabled: false
-
         ingress:
           enabled: false  # using Gateway API HTTPRoute
   syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true

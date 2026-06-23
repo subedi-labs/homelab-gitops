@@ -16,9 +16,6 @@ spec:
       values: |
         # your current values here
   syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
