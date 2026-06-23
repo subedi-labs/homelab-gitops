@@ -19,7 +19,7 @@ spec:
           autoDatabaseSchemaMigration: true
           image:
             repository: infisical/infisical
-            tag: "v0.161.3-postgres"
+            tag: "v0.160.11"
           replicaCount: 1
           kubeSecretRef: "infisical-secrets"
           env:
