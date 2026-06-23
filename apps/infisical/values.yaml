@@ -1,0 +1,24 @@
+infisical:
+  enabled: true
+  autoDatabaseSchemaMigration: true
+  image:
+    repository: infisical/infisical
+    tag: "v0.160.11"
+  replicaCount: 1
+  kubeSecretRef: "infisical-secrets"
+  env:
+    SITE_URL: "https://infisical.pukarsubedi.com"
+    TELEMETRY_ENABLED: "false"
+    DB_CONNECTION_URI: "" # pulled from kubeSecretRef
+
+postgresql:
+  enabled: false # using CNPG
+
+redis:
+  enabled: true
+  architecture: standalone
+  auth:
+    enabled: false
+
+ingress:
+  enabled: false # using Gateway API HTTPRoute

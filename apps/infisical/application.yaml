@@ -8,35 +8,16 @@ spec:
     namespace: infisical
     server: https://kubernetes.default.svc
   project: default
-  source:
-    chart: infisical-standalone
-    repoURL: "https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts/"
-    targetRevision: 1.9.0
-    helm:
-      values: |
-        infisical:
-          enabled: true
-          autoDatabaseSchemaMigration: true
-          image:
-            repository: infisical/infisical
-            tag: "v0.160.11"
-          replicaCount: 1
-          kubeSecretRef: "infisical-secrets"
-          env:
-            SITE_URL: "https://infisical.pukarsubedi.com"
-            TELEMETRY_ENABLED: "false"
-            DB_CONNECTION_URI: ""  # pulled from kubeSecretRef
-
-        postgresql:
-          enabled: false  # using CNPG
-
-        redis:
-          enabled: true
-          architecture: standalone
-          auth:
-            enabled: false
-        ingress:
-          enabled: false  # using Gateway API HTTPRoute
+  sources:
+    - chart: infisical-standalone
+      repoURL: "https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts/"
+      targetRevision: 1.9.0
+      helm:
+        valueFiles:
+          - $values/k8s/infisical/values.yaml
+    - repoURL: "https://github.com/subedi-labs/homelab.git"
+      targetRevision: HEAD
+      ref: values
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
