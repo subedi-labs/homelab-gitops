@@ -1,197 +1,118 @@
-# kube-prometheus-stack values for k3s + Cilium + Longhorn + Authentik
-# Repo: https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack
+# charts/kube-prometheus-stack/values.yaml
+# kube-prometheus-stack 87.1.0
+# Stack: k3s · Cilium (no kube-proxy) · Longhorn · Authentik · Gateway API
 
-# ---------------------------------------------------------------------------
-# k3s quirks
-# ---------------------------------------------------------------------------
-
-# Cilium replaces kube-proxy — disable this monitor entirely
-kubeProxy:
-  enabled: false
-
-# k3s bundles etcd and exposes metrics on port 2381 (HTTP, no TLS)
-# Replace with your actual node IPs
-kubeEtcd:
+# ── Grafana ────────────────────────────────────────────────────────────────────
+grafana:
   enabled: true
-  endpoints:
-    - 10.0.0.50
-    - 10.0.0.51
-    - 10.0.0.52
-  service:
-    enabled: true
-    port: 2381
-    targetPort: 2381
-  serviceMonitor:
-    enabled: true
-    scheme: http
-    insecureSkipVerify: true
+  defaultDashboardsEnabled: true
 
-# k3s controller-manager — requires k3s to be started with
-# --kube-controller-manager-arg=bind-address=0.0.0.0
-# Add to /etc/rancher/k3s/config.yaml and restart k3s on each control-plane node
-kubeControllerManager:
-  enabled: true
-  endpoints:
-    - <k3-01-ip>
-    - <k3-02-ip>
-    - <k3-03-ip>
-  service:
-    enabled: true
-    port: 10257
-    targetPort: 10257
-  serviceMonitor:
-    enabled: true
-    https: true
-    insecureSkipVerify: true
+  # Authentik OIDC — populate grafana-oidc-secret via ESO/Infisical with keys:
+  #   GF_AUTH_GENERIC_OAUTH_CLIENT_ID
+  #   GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
+  envFromSecret: grafana-oidc-secret
 
-# k3s scheduler — same bind-address requirement as controller-manager
-# --kube-scheduler-arg=bind-address=0.0.0.0
-kubeScheduler:
-  enabled: true
-  endpoints:
-    - <k3-01-ip>
-    - <k3-02-ip>
-    - <k3-03-ip>
-  service:
-    enabled: true
-    port: 10259
-    targetPort: 10259
-  serviceMonitor:
-    enabled: true
-    https: true
-    insecureSkipVerify: true
+  grafana.ini:
+    server:
+      root_url: https://grafana.pukarsubedi.com
+    auth.generic_oauth:
+      enabled: true
+      name: Authentik
+      icon: signin
+      scopes: openid profile email
+      auth_url: https://authentik.pukarsubedi.com/application/o/authorize/
+      token_url: https://authentik.pukarsubedi.com/application/o/token/
+      api_url: https://authentik.pukarsubedi.com/application/o/userinfo/
+      role_attribute_path: contains(groups[*], 'admins') && 'Admin' || 'Viewer'
+      allow_sign_up: true
 
-# ---------------------------------------------------------------------------
-# Prometheus
-# ---------------------------------------------------------------------------
+  # Disable built-in ingress — using Gateway API HTTPRoute instead
+  ingress:
+    enabled: false
+
+  # Grafana doesn't need a PV (dashboards via ConfigMaps, state is ephemeral)
+  persistence:
+    enabled: false
+
+  # Sidecar discovers dashboards from ConfigMaps labelled grafana_dashboard=1
+  sidecar:
+    dashboards:
+      enabled: true
+      label: grafana_dashboard
+      labelValue: "1"
+    datasources:
+      enabled: true
+
+# ── Prometheus ─────────────────────────────────────────────────────────────────
 prometheus:
   prometheusSpec:
-    retention: 30d
-    retentionSize: 20GB
+    retention: 15d
+    retentionSize: "10GiB"
 
-    # Watch all namespaces — don't restrict to Helm-chart-only ServiceMonitors
-    serviceMonitorSelectorNilUsesHelmValues: false
-    podMonitorSelectorNilUsesHelmValues: false
-    ruleSelectorNilUsesHelmValues: false
-    probeSelectorNilUsesHelmValues: false
-
+    # Longhorn-backed PVC for Prometheus TSDB
     storageSpec:
       volumeClaimTemplate:
         spec:
           storageClassName: longhorn
-          accessModes: [ReadWriteOnce]
+          accessModes: ["ReadWriteOnce"]
           resources:
             requests:
-              storage: 25Gi
+              storage: 20Gi
 
-    resources:
-      requests:
-        cpu: 200m
-        memory: 512Mi
-      limits:
-        memory: 2Gi
+    # Discover ServiceMonitors/PodMonitors across all namespaces
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    ruleSelectorNilUsesHelmValues: false
 
-# ---------------------------------------------------------------------------
-# Alertmanager
-# ---------------------------------------------------------------------------
+  ingress:
+    enabled: false
+
+# ── Alertmanager ──────────────────────────────────────────────────────────────
 alertmanager:
   alertmanagerSpec:
     storage:
       volumeClaimTemplate:
         spec:
           storageClassName: longhorn
-          accessModes: [ReadWriteOnce]
+          accessModes: ["ReadWriteOnce"]
           resources:
             requests:
-              storage: 5Gi
+              storage: 2Gi
 
-    resources:
-      requests:
-        cpu: 50m
-        memory: 64Mi
-      limits:
-        memory: 256Mi
-
-# ---------------------------------------------------------------------------
-# Grafana
-# ---------------------------------------------------------------------------
-grafana:
-  enabled: true
-  defaultDashboardsTimezone: America/New_York
-
-  # Persistent dashboards/plugins
-  persistence:
-    enabled: true
-    storageClassName: longhorn
-    size: 5Gi
-
-  # Admin credentials from ESO-managed secret (see external-secrets.yaml)
-  admin:
-    existingSecret: grafana-admin-secret
-    userKey: admin-user
-    passwordKey: admin-password
-
-  # OAuth client_id/secret injected as env vars from ESO secret
-  envFromSecret: grafana-oauth-secret
-
-  grafana.ini:
-    server:
-      root_url: https://grafana.pukarsubedi.com
-    auth:
-      disable_login_form: false # keep true once SSO is verified
-      oauth_auto_login: false
-    auth.generic_oauth:
-      enabled: true
-      name: Authentik
-      allow_sign_up: true
-      client_id: "${GF_AUTH_GENERIC_OAUTH_CLIENT_ID}"
-      client_secret: "${GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET}"
-      scopes: openid email profile
-      auth_url: https://authentik.pukarsubedi.com/application/o/grafana/authorize/
-      token_url: https://authentik.pukarsubedi.com/application/o/grafana/token/
-      api_url: https://authentik.pukarsubedi.com/application/o/userinfo/
-      # Map Authentik groups → Grafana roles
-      role_attribute_path: "contains(groups[*], 'grafana-admins') && 'Admin' || contains(groups[*], 'grafana-editors') && 'Editor' || 'Viewer'"
-      use_pkce: true
-
-  # Disable built-in Ingress; HTTPRoute defined separately
   ingress:
     enabled: false
 
-  resources:
-    requests:
-      cpu: 100m
-      memory: 128Mi
-    limits:
-      memory: 512Mi
+# ── k3s / Cilium adjustments ──────────────────────────────────────────────────
 
-# ---------------------------------------------------------------------------
-# Prometheus Operator
-# ---------------------------------------------------------------------------
-prometheusOperator:
-  resources:
-    requests:
-      cpu: 50m
-      memory: 64Mi
-    limits:
-      memory: 256Mi
+# Cilium replaces kube-proxy — disable scraping it
+kubeProxy:
+  enabled: false
 
-# ---------------------------------------------------------------------------
-# Node Exporter — tolerate control-plane nodes so all 3 get scraped
-# ---------------------------------------------------------------------------
-prometheus-node-exporter:
-  tolerations:
-    - key: node-role.kubernetes.io/control-plane
-      operator: Exists
-      effect: NoSchedule
+# k3s embeds etcd but doesn't expose it on the default port with client certs
+# accessible by Prometheus without extra config. Disable until you wire the
+# etcd-client-cert secret (see README for how to enable).
+kubeEtcd:
+  enabled: false
 
-# ---------------------------------------------------------------------------
-# kube-state-metrics
-# ---------------------------------------------------------------------------
+# k3s binds scheduler and controller-manager to 127.0.0.1 by default.
+# These will fail to scrape unless you patch the k3s systemd unit to bind
+# to 0.0.0.0. Disable until then.
+kubeScheduler:
+  enabled: false
+
+kubeControllerManager:
+  enabled: false
+
+# kube-state-metrics and node-exporter are fine as-is
 kube-state-metrics:
-  resources:
-    requests:
-      cpu: 50m
-      memory: 64Mi
-    limits:
-      memory: 256Mi
+  enabled: true
+
+nodeExporter:
+  enabled: true
+
+prometheusOperator:
+  enabled: true
+  # Admission webhook is enabled by default — ignoreDifferences in the
+  # Application manifest handles caBundle drift
+  admissionWebhooks:
+    enabled: true
