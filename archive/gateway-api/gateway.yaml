@@ -10,10 +10,10 @@ spec:
     - name: http
       protocol: HTTP
       port: 80
-      hostname: argocd.pukarsubedi.com
+      hostname: "*.pukarsubedi.com"
       allowedRoutes:
         namespaces:
-          from: Same
+          from: All
     - name: https
       protocol: HTTPS
       port: 443
