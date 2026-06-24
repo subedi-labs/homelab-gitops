@@ -1,0 +1,21 @@
+configs:
+  cm:
+    url: "https://argocd.pukarsubedi.com"
+    oidc.config: |
+      name: Authentik
+      issuer: https://authentik.pukarsubedi.com/application/o/argo-cd/
+      clientID: argocd
+      clientSecret: $oidc.authentik.clientSecret
+      requestedScopes:
+        - openid
+        - profile
+        - email
+        - groups
+
+  rbac:
+    policy.csv: |
+      g, authentik Admins, role:admin
+    policy.default: "role:readonly"
+
+  params:
+    server.insecure: "true"
