@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/subedi-labs/homelab-docs
     targetRevision: HEAD
-    path: clusters/dev-cluster/infrastructure/gateway
+    path: dev-cluster/infrastructure/gateway-api
   destination:
     server: https://kubernetes.default.svc
     namespace: gateway-system
