@@ -44,6 +44,26 @@ spec:
       - ServerSideApply=true
       - RespectIgnoreDifferences=true
   ignoreDifferences:
+    # Hubble mTLS certs — Cilium manages these internally.
+    # Helm re-generates on every render; ArgoCD must never overwrite.
+    - group: ""
+      kind: Secret
+      name: cilium-ca
+      namespace: kube-system
+      jsonPointers:
+        - /data
+    - group: ""
+      kind: Secret
+      name: hubble-relay-client-certs
+      namespace: kube-system
+      jsonPointers:
+        - /data
+    - group: ""
+      kind: Secret
+      name: hubble-server-certs
+      namespace: kube-system
+      jsonPointers:
+        - /data
     # Cilium agent writes a config hash annotation onto its own pod template at runtime
     - group: apps
       kind: DaemonSet
