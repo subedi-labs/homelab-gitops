@@ -4,21 +4,20 @@ metadata:
   name: cert-manager
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-2
+    argocd.argoproj.io/sync-wave: "-2"
 spec:
   project: default
-  source:
-    repoURL: https://charts.jetstack.io
-    chart: cert-manager
-    targetRevision: v1.17.2
-    helm:
-      values: |
-        crds:
-          enabled: true
-        replicaCount: 1
-        global:
-          leaderElection:
-            namespace: cert-manager
+  sources:
+    - repoURL: https://charts.jetstack.io
+      chart: cert-manager
+      targetRevision: v1.17.2
+      helm:
+        releaseName: cert-manager
+        valueFiles:
+          - $values/dev-cluster/infrastructure/cert-manager/values.yaml
+    - repoURL: https://github.com/subedi-labs/homelab
+      targetRevision: HEAD
+      ref: values
   destination:
     server: https://kubernetes.default.svc
     namespace: cert-manager
@@ -33,3 +32,12 @@ spec:
     managedNamespaceMetadata:
       labels:
         app.kubernetes.io/managed-by: argocd
+  ignoreDifferences:
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+      jsonPointers:
+        - /webhooks/0/clientConfig/caBundle
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+      jsonPointers:
+        - /webhooks/0/clientConfig/caBundle

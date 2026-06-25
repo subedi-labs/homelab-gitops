@@ -1,0 +1,39 @@
+crds:
+  enabled: true
+
+replicaCount: 1
+
+global:
+  leaderElection:
+    namespace: cert-manager
+
+# Resource limits suitable for a homelab single-replica deploy
+resources:
+  requests:
+    cpu: 10m
+    memory: 64Mi
+  limits:
+    memory: 128Mi
+
+webhook:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      memory: 64Mi
+
+cainjector:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      memory: 128Mi
+
+# Prometheus metrics (scraped by kube-prometheus-stack)
+prometheus:
+  enabled: true
+  servicemonitor:
+    enabled: true
+    namespace: cert-manager
