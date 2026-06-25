@@ -1,0 +1,13 @@
+infisical:
+  enabled: true
+  replicaCount: 1
+  autoDatabaseSchemaMigration: true
+  kubeSecretRef: infisical-secrets
+postgresql:
+  enabled: false
+redis:
+  enabled: true
+ingress:
+  enabled: false
+ingress-nginx:
+  enabled: false

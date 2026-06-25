@@ -5,36 +5,17 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  source:
-    repoURL: https://helm.cilium.io/
-    chart: cilium
-    targetRevision: 1.19.4
-    helm:
-      releaseName: cilium
-      values: |
-        externalIPs:
-          enabled: true
-        gatewayAPI:
-          enabled: true
-        hubble:
-          relay:
-            enabled: true
-          ui:
-            enabled: true
-        ipam:
-          mode: kubernetes
-        k8sServiceHost: 10.0.0.50
-        k8sServicePort: 6443
-        kubeProxyReplacement: true
-        l2announcements:
-          enabled: true
-          leaseDuration: 3s
-          leaseRenewDeadline: 1s
-          leaseRetryPeriod: 200ms
-        operator:
-          replicas: 2
-        routingMode: tunnel
-        tunnelProtocol: vxlan
+  sources:
+    - repoURL: https://helm.cilium.io/
+      chart: cilium
+      targetRevision: 1.19.4
+      helm:
+        releaseName: cilium
+        valueFiles:
+          - $values/dev-cluster/infrastructure/cilium/values.yaml
+    - repoURL: https://github.com/subedi-labs/homelab-docs
+      targetRevision: HEAD
+      ref: values
   destination:
     server: https://kubernetes.default.svc
     namespace: kube-system
@@ -64,14 +45,12 @@ spec:
       namespace: kube-system
       jsonPointers:
         - /data
-    # Cilium agent writes a config hash annotation onto its own pod template at runtime
     - group: apps
       kind: DaemonSet
       name: cilium
       namespace: kube-system
       jsonPointers:
         - /spec/template/metadata/annotations
-    # cilium-config gets node-specific fields written back by the operator
     - group: ""
       kind: ConfigMap
       name: cilium-config
@@ -79,7 +58,6 @@ spec:
       jqPathExpressions:
         - .data["node-ips"]
         - .data["ipam-multi-pool-pre-allocation"]
-    # Operator and Hubble deployments get hash annotations injected at runtime
     - group: apps
       kind: Deployment
       name: cilium-operator

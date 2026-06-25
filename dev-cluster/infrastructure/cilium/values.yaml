@@ -1,0 +1,23 @@
+externalIPs:
+  enabled: true
+gatewayAPI:
+  enabled: true
+hubble:
+  relay:
+    enabled: true
+  ui:
+    enabled: true
+ipam:
+  mode: kubernetes
+k8sServiceHost: 10.0.0.50
+k8sServicePort: 6443
+kubeProxyReplacement: true
+l2announcements:
+  enabled: true
+  leaseDuration: 3s
+  leaseRenewDeadline: 1s
+  leaseRetryPeriod: 200ms
+operator:
+  replicas: 2
+routingMode: tunnel
+tunnelProtocol: vxlan
