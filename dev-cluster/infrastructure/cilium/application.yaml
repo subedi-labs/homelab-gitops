@@ -1,0 +1,80 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cilium
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://helm.cilium.io/
+    chart: cilium
+    targetRevision: 1.19.4
+    helm:
+      releaseName: cilium
+      values: |
+        externalIPs:
+          enabled: true
+        gatewayAPI:
+          enabled: true
+        hubble:
+          relay:
+            enabled: true
+          ui:
+            enabled: true
+        ipam:
+          mode: kubernetes
+        k8sServiceHost: 10.0.0.50
+        k8sServicePort: 6443
+        kubeProxyReplacement: true
+        l2announcements:
+          enabled: true
+          leaseDuration: 3s
+          leaseRenewDeadline: 1s
+          leaseRetryPeriod: 200ms
+        operator:
+          replicas: 2
+        routingMode: tunnel
+        tunnelProtocol: vxlan
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  # No automated sync — manual only. Cilium is CNI; accidental agent restart = network outage.
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
+      - RespectIgnoreDifferences=true
+  ignoreDifferences:
+    # Cilium agent writes a config hash annotation onto its own pod template at runtime
+    - group: apps
+      kind: DaemonSet
+      name: cilium
+      namespace: kube-system
+      jsonPointers:
+        - /spec/template/metadata/annotations
+    # cilium-config gets node-specific fields written back by the operator
+    - group: ""
+      kind: ConfigMap
+      name: cilium-config
+      namespace: kube-system
+      jqPathExpressions:
+        - .data["node-ips"]
+        - .data["ipam-multi-pool-pre-allocation"]
+    # Operator and Hubble deployments get hash annotations injected at runtime
+    - group: apps
+      kind: Deployment
+      name: cilium-operator
+      namespace: kube-system
+      jsonPointers:
+        - /spec/template/metadata/annotations
+    - group: apps
+      kind: Deployment
+      name: hubble-relay
+      namespace: kube-system
+      jsonPointers:
+        - /spec/template/metadata/annotations
+    - group: apps
+      kind: Deployment
+      name: hubble-ui
+      namespace: kube-system
+      jsonPointers:
+        - /spec/template/metadata/annotations

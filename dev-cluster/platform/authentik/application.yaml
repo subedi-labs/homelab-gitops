@@ -8,7 +8,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "0"
   finalizers:
-    - resources-finalizer.argocd.argoproj.io  # deletes child resources on app deletion
+    - resources-finalizer.argocd.argoproj.io # deletes child resources on app deletion
 spec:
   project: default
   source:
@@ -24,4 +24,4 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - ServerSideApply=true   # needed for CRDs like CNPG Cluster
+      - ServerSideApply=true # needed for CRDs like CNPG Cluster
