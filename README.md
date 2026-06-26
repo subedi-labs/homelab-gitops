@@ -2,4 +2,4 @@
 
 ## Cheatsheet
 
-- kubectl delete <resource> <resource_name> -n <namespace> --force --grace-period=0
+- kubectl delete <resource> -n <namespace> <resource_name> --force --grace-period=0
