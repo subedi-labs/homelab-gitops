@@ -11,3 +11,4 @@ ingress:
   enabled: false
 ingress-nginx:
   enabled: false
+revisionHistoryLimit: 0
