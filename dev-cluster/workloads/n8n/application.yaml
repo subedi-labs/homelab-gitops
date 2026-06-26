@@ -6,13 +6,13 @@ metadata:
 spec:
   project: default
   sources:
-    - repoURL: https://8gears.container-registry.com/chartrepo/library
+    - repoURL: oci://8gears.container-registry.com/library
       chart: n8n
       targetRevision: 0.26.0
       helm:
         valueFiles:
           - $values/dev-cluster/workloads/n8n/values.yaml
-    - repoURL: https://github.com/subedi-labs/homelab-docs
+    - repoURL: https://github.com/subedi-labs/homelab-gitops
       targetRevision: HEAD
       ref: values
   destination:
