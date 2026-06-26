@@ -3,6 +3,7 @@ infisical:
   replicaCount: 1
   autoDatabaseSchemaMigration: true
   kubeSecretRef: infisical-secrets
+  revisionHistoryLimit: 0
 postgresql:
   enabled: false
 redis:
@@ -11,4 +12,3 @@ ingress:
   enabled: false
 ingress-nginx:
   enabled: false
-revisionHistoryLimit: 0
