@@ -4,10 +4,10 @@ metadata:
   name: infisical-db
   namespace: infisical
 spec:
-  instances: 2
+  instances: 1
   storage:
     storageClass: longhorn
-    size: 5Gi
+    size: 2Gi
   bootstrap:
     initdb:
       database: infisical
