@@ -16,7 +16,7 @@ spec:
       helm:
         valueFiles:
           - $values/charts/kube-prometheus-stack/values.yaml
-    - repoURL: https://github.com/subedi-labs/homelab-docs.git
+    - repoURL: https://github.com/subedi-labs/homelab-gitops.git
       targetRevision: HEAD
       ref: values
   destination:

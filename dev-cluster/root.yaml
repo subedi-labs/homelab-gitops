@@ -6,12 +6,12 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/subedi-labs/homelab-docs
+    repoURL: https://github.com/subedi-labs/homelab-gitops.git
     targetRevision: HEAD
     path: clusters/dev-cluster
     directory:
       recurse: true
-      exclude: 'root-app.yaml'
+      exclude: "root-app.yaml"
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd

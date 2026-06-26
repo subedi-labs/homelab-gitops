@@ -13,7 +13,7 @@ spec:
         releaseName: cilium
         valueFiles:
           - $values/dev-cluster/infrastructure/cilium/values.yaml
-    - repoURL: https://github.com/subedi-labs/homelab-docs
+    - repoURL: https://github.com/subedi-labs/homelab-gitops.git
       targetRevision: HEAD
       ref: values
   destination:

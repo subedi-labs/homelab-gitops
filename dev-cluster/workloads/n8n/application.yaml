@@ -12,7 +12,7 @@ spec:
       helm:
         valueFiles:
           - $values/dev-cluster/workloads/n8n/values.yaml
-    - repoURL: https://github.com/subedi-labs/homelab-gitops
+    - repoURL: https://github.com/subedi-labs/homelab-gitops.git
       targetRevision: HEAD
       ref: values
   destination:

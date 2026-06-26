@@ -8,7 +8,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/subedi-labs/homelab-docs
+    repoURL: https://github.com/subedi-labs/homelab-gitops.git
     targetRevision: HEAD
     path: dev-cluster/infrastructure/gateway-api
   destination:

@@ -14,8 +14,8 @@ spec:
       helm:
         releaseName: infisical
         valueFiles:
-          - $values/clusters/dev-cluster/infrastructure/infisical/values.yaml
-    - repoURL: https://github.com/subedi-labs/homelab-docs
+          - $values/dev-cluster/infrastructure/infisical/values.yaml
+    - repoURL: https://github.com/subedi-labs/homelab-gitops.git
       targetRevision: HEAD
       ref: values
   destination:
