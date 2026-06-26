@@ -1,42 +1,39 @@
-replicaCount: 1
+main:
+  config:
+    db:
+      type: postgresdb
+      postgresdb:
+        host: "n8n-db-rw.n8n.svc.cluster.local"
+        port: 5432
+        database: app
+        user: app
 
-config:
-  database:
-    type: postgresdb
-    postgresdb:
-      host: "n8n-db-rw.n8n.svc.cluster.local"
-      port: 5432
-      database: app
-      user: app
+  extraEnv:
+    DB_POSTGRESDB_PASSWORD:
+      valueFrom:
+        secretKeyRef:
+          name: n8n-db-app
+          key: password
+    N8N_ENCRYPTION_KEY:
+      valueFrom:
+        secretKeyRef:
+          name: n8n-secrets
+          key: encryption-key
+    N8N_HOST:
+      value: "n8n.pukarsubedi.com"
+    N8N_PROTOCOL:
+      value: "https"
+    WEBHOOK_URL:
+      value: "https://n8n.pukarsubedi.com/"
+    N8N_PORT:
+      value: "5678"
 
-extraEnv:
-  - name: DB_POSTGRESDB_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: n8n-db-app
-        key: password
-  - name: N8N_ENCRYPTION_KEY
-    valueFrom:
-      secretKeyRef:
-        name: n8n-secrets
-        key: encryption-key
-  - name: N8N_HOST
-    value: "n8n.pukarsubedi.com"
-  - name: N8N_PROTOCOL
-    value: "https"
-  - name: WEBHOOK_URL
-    value: "https://n8n.pukarsubedi.com/"
-  - name: N8N_PORT
-    value: "5678"
+  persistence:
+    enabled: true
+    type: dynamic
+    storageClass: longhorn
+    size: 5Gi
 
-persistence:
-  enabled: true
-  storageClass: longhorn
-  size: 5Gi
-
-service:
-  type: ClusterIP
-  port: 5678
-
-ingress:
-  enabled: false
+  service:
+    type: ClusterIP
+    port: 80 # chart now proxies internally; HTTPRoute targets port 80
