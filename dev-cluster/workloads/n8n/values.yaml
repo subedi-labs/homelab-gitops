@@ -32,7 +32,10 @@ main:
     enabled: true
     type: dynamic
     storageClass: longhorn
-    size: 5Gi
+    size: 2Gi
+
+storage:
+  size: 2Gi
 
   service:
     type: ClusterIP
