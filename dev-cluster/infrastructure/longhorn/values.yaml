@@ -1,2 +1,4 @@
 defaultSettings:
   defaultReplicaCount: 1
+  priorityClass: longhorn-critical
+  disableRevisionCounter: true
