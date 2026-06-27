@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: ghcr.io/<your-github-username>/homebrain-frontend:latest
+          image: ghcr.io/pukar10/homebrain-frontend:latest
           ports:
             - containerPort: 80
