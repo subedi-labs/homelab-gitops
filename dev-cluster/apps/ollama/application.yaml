@@ -26,7 +26,7 @@ spec:
     # Source 3: Raw manifests (HTTPRoute) not included in the Helm chart
     - repoURL: https://github.com/subedi-labs/homelab-gitops.git
       targetRevision: HEAD
-      path: apps/ollama/manifests
+      path: apps/ollama
 
   destination:
     server: https://kubernetes.default.svc
