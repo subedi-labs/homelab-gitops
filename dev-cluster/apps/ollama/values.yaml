@@ -1,0 +1,127 @@
+# ============================================================
+# Ollama Helm Values
+# Chart: https://helm.otwld.com (otwld/ollama)
+# Version: 1.63.0
+# ============================================================
+
+ollama:
+  gpu:
+    # Set to true and configure type/number if you have GPU passthrough
+    # set up on a Proxmox VM (nvidia or amd). CPU-only by default.
+    enabled: false
+    # type: nvidia
+    # number: 1
+
+  models:
+    # Models are pulled at container startup via an init Job.
+    # The Job name is hashed from this list — changing models triggers a new Job run.
+    #
+    # WHY phi4 is excluded: Each node has ~12Gi total RAM. phi4 needs ~10–12Gi
+    # during inference which would starve the entire node. llama3.2:3b only needs
+    # ~2–3Gi and is a much better fit for this homelab.
+    #
+    # Upgrade path: if you add a node with more RAM or enable GPU passthrough,
+    # you can add phi4 back here and bump the PVC to 40Gi + memory limit to 14Gi.
+    pull:
+      - llama3.2:3b
+      # - phi4           # ~9GB disk, ~10-12Gi RAM — too heavy for 12Gi nodes
+      # - llama3.2:1b    # ~1GB disk, ~1Gi RAM — ultra-light option if needed
+
+    # run: [] — intentionally omitted so models are loaded on demand
+    # rather than held in memory at startup. Saves RAM on homelab hardware.
+    # Uncomment to preload a model:
+    # run:
+    #   - llama3.2:3b
+
+# ============================================================
+# Persistent Volume — backed by Longhorn
+# Stores all pulled models under /root/.ollama
+# phi4 (~9GB) + llama3.2:3b (~2GB) + overhead = ~40Gi is safe
+# ============================================================
+persistentVolume:
+  enabled: true
+  storageClass: longhorn
+  # llama3.2:3b is ~2GB on disk. 15Gi gives comfortable headroom for the model,
+  # Ollama's internal metadata, and room to add 1–2 more lightweight models later
+  # (e.g. llama3.2:1b at ~1GB) without needing to resize.
+  # If you add phi4 later, bump this to 40Gi.
+  size: 15Gi
+  accessModes:
+    - ReadWriteOnce
+
+# ============================================================
+# Service — ClusterIP only; external access via HTTPRoute below
+# ============================================================
+service:
+  type: ClusterIP
+  port: 11434
+
+# ============================================================
+# Resources
+# CPU-only inference is memory-bound. phi4 needs ~10–12Gi RAM
+# during active inference. Adjust limits to match your node capacity.
+# Check your node RAM with: kubectl describe nodes | grep -A5 "Allocated resources"
+# ============================================================
+resources:
+  requests:
+    cpu: "500m"
+    # Low request so the scheduler places the pod without blocking other workloads.
+    # Actual RAM usage during inference will be higher (up to the limit below).
+    memory: 1Gi
+  limits:
+    cpu: "3"
+    # llama3.2:3b needs ~2–3Gi during active inference. 4Gi gives safe headroom
+    # while leaving ~8Gi free on the node for your other workloads.
+    memory: 4Gi
+
+# ============================================================
+# Environment Variables
+# OLLAMA_ORIGINS — required for CORS since the HomeBrain frontend
+# at homebrain.pukarsubedi.com calls this API from the browser.
+# OLLAMA_KEEP_ALIVE — keeps loaded models in memory between requests.
+# ============================================================
+extraEnv:
+  - name: OLLAMA_ORIGINS
+    value: "https://homebrain.pukarsubedi.com"
+  - name: OLLAMA_KEEP_ALIVE
+    value: "5m"
+  # Uncomment to increase context window size (uses more RAM):
+  # - name: OLLAMA_NUM_CTX
+  #   value: "4096"
+
+# ============================================================
+# Liveness / Readiness
+# Default probes check /api/tags. Model pulls can make startup
+# slow, so we give generous thresholds here.
+# ============================================================
+livenessProbe:
+  enabled: true
+  path: /
+  initialDelaySeconds: 60
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+
+readinessProbe:
+  enabled: true
+  path: /api/tags
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+
+# ============================================================
+# Image
+# Uses the standard Ollama image. Tag defaults to chart appVersion.
+# ============================================================
+image:
+  repository: ollama/ollama
+  pullPolicy: IfNotPresent
+  # tag: ""  # defaults to chart appVersion; pin here if needed
+
+# ============================================================
+# Ingress — DISABLED
+# We use Gateway API (HTTPRoute) instead, defined in manifests/httproute.yaml
+# ============================================================
+ingress:
+  enabled: false
