@@ -15,5 +15,5 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: homebrain-frontend
+        - name: homebrain-ui
           port: 80
