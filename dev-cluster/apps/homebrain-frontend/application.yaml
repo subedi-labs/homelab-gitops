@@ -1,0 +1,21 @@
+# apps/homebrain-frontend/application.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: homebrain-frontend
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/subedi-labs/homelab-gitops.git
+    targetRevision: HEAD
+    path: dev-cluster/apps/homebrain-frontend
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: homebrain
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
