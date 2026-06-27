@@ -4,46 +4,36 @@ metadata:
   name: ollama
   namespace: argocd
   annotations:
-    # Deploy after storage (Longhorn) and networking (Cilium Gateway) are ready
-    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-wave: '3'
 spec:
-  project: default
-  sources:
-    # Source 1: Upstream Ollama Helm chart
-    - repoURL: https://helm.otwld.com/
-      chart: ollama
-      targetRevision: "1.63.0"
-      helm:
-        releaseName: ollama
-        valueFiles:
-          - $values/dev-cluster/apps/ollama/values.yaml
-
-    # Source 2: Git ref for $values resolution above
-    - repoURL: https://github.com/subedi-labs/homelab-gitops.git
-      targetRevision: HEAD
-      ref: values
-
-    # Source 3: Raw manifests (HTTPRoute) not included in the Helm chart
-    - repoURL: https://github.com/subedi-labs/homelab-gitops.git
-      targetRevision: HEAD
-      path: dev-cluster/apps/ollama
-
   destination:
-    server: https://kubernetes.default.svc
     namespace: ollama
-
-  syncPolicy:
-    automated:
-      prune: false # Never auto-delete — model PVC is stateful
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
-      - ServerSideApply=true
-
-  # Ignore annotation/label churn on the PVC from Longhorn's internal reconciler
+    server: https://kubernetes.default.svc
   ignoreDifferences:
-    - group: ""
+    - group: ''
       kind: PersistentVolumeClaim
       jsonPointers:
         - /metadata/annotations
         - /metadata/labels
+  project: default
+  sources:
+    - chart: ollama
+      helm:
+        releaseName: ollama
+        valueFiles:
+          - $values/dev-cluster/apps/ollama/values.yaml
+      repoURL: https://helm.otwld.com/
+      targetRevision: 1.63.0
+    - ref: values
+      repoURL: https://github.com/subedi-labs/homelab-gitops.git
+      targetRevision: HEAD
+    - path: dev-cluster/apps/ollama
+      repoURL: https://github.com/subedi-labs/homelab-gitops.git
+      targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
